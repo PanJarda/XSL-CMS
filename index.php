@@ -21,46 +21,80 @@ function mergeXML($arr, $rootName) {
   return simplexml_import_dom($root);
 }
 
-funciton appendXML($root, $child) {
-
+function sqlQuery($query) {
+  $result = $GLOBALS['connection']->query($query);
+  return $result ? $result->fetch_all(MYSQLI_ASSOC) : $GLOBALS['connection']->error;
 }
 
-function processQuery($queryXML) {
+function processAllQueries($xmlDoc) {
+  $x = $xmlDoc->documentElement;
+  $proc = new XSLTProcessor();
+  $proc->importStylesheet(simplexml_load_file("lib/xml2sql.xsl"));
+  $queries = $x->getElementsByTagNameNS('sql', 'query');
+  for ($i = 0; $i < $queries->length; ++$i) {
+    $query = new DOMDocument();
+    $rowName = $queries->item($i)->attributes['item']->value;
+    $query->appendChild($query->importNode($queries->item($i), true));
+    $result = assoc2XML(sqlQuery($proc->transformToXML($query)), $queries->item($i)->parentNode->tagName, $rowName ? $rowName : 'item');
+    $x->replaceChild($xmlDoc->importNode(dom_import_simplexml($result), true), $queries->item($i)->parentNode);
+  }
 
-  return $simpleXMLElement;
+  $queries = $x->getElementsByTagNameNS('sql', 'import');
+  for ($i = 0; $i < $queries->length; ++$i) {
+    $query = new DOMDocument();
+    $query->load($queries->item($i)->attributes['href']->value);
+    $rowName = $query->documentElement->attributes['item']->value;
+    $result = assoc2XML(sqlQuery($proc->transformToXML($query)), $queries->item($i)->parentNode->tagName, $rowName ? $rowName : 'item');
+    $x->replaceChild($xmlDoc->importNode(dom_import_simplexml($result), true), $queries->item($i)->parentNode);
+  }
+
+  $queries = $x->getElementsByTagNameNS('data', 'import');
+  for ($i = 0; $i < $queries->length; ++$i) {
+    $query = new DOMDocument();
+    $query->load($queries->item($i)->attributes['href']->value);
+    $x->replaceChild($xmlDoc->importNode($query->documentElement, true), $queries->item($i));
+  }
+
+  return $xmlDoc;
 }
 
-function processAllQueries($xml) {
-  return $outputXMLData;
+function applyTemplate($xmlDoc) {
+  $data = new DOMDocument();
+  $data->load("config.xml");
+  $xmlDocChildren = $xmlDoc->documentElement->childNodes;
+  for ($i = 0; $i < $xmlDocChildren->length; $i++) {
+    $data->documentElement->appendChild($data->importNode($xmlDocChildren->item($i), true));  
+  }
+  
+  $x = $data->documentElement;
+  $templateTag = $x->getElementsByTagNameNS('data', 'template')->item(0);
+  $templateName = $templateTag->attributes['href']->value;
+  $data->documentElement->removeChild($templateTag);
+
+  $xsl = simplexml_load_file($templateName);
+  $proc = new XSLTProcessor();
+  $proc->importStylesheet($xsl);
+  //print_r($data->saveXML());
+  return $proc->transformToXML($data);
 }
 
-function applyXSLT($data) {
-  // find xslt template and process;
-  return html;
+function test() {
+  $xmlDoc = new DOMDocument();
+  $xmlDoc->load("data.xml");
+  echo applyTemplate(processAllQueries($xmlDoc));
 }
 
-//...................................................
 $config = simplexml_load_file("config.xml");
 $servername = $config->db['server'];
 $username = $config->db['username'];
 $password = $config->db['password'];
 $db=  $config->db['database'];
-$connection = new mysqli($servername, $username, $password);
-$connection->select_db($db);
+$conn = new mysqli($servername, $username, $password);
+$GLOBALS['connection'] = $conn;
+$GLOBALS['connection']->select_db($db);
 
-if ($conn->connect_error) {
+if ($GLOBALS['connection']->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$query = 'SELECT * FROM academic_positions';
-$result = $connection->query($query);
-$result_assoc = $result->fetch_all(MYSQLI_ASSOC);
-mergeXML([assoc2XML($result_assoc, 'academic_positions', 'position')], 'data');
-
-$data = simplexml_load_file("data.xml");
-
-$xsl = simplexml_load_file("About.xsl");
-
-$proc = new XSLTProcessor();
-$proc->importStylesheet($xsl);
-echo $proc->transformToXML($data);
+test();

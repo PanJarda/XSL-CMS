@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:import href="partials/routes.xsl"/>
 
-  <xsl:template match="/data">
+  <xsl:template match="/config">
     <html>
       <head>
         <title><xsl:value-of select="title"/> - <xsl:value-of select="brand"/></title>

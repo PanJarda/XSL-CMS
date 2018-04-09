@@ -3,7 +3,7 @@
     <li>
       <xsl:value-of select="start_year"/> - <xsl:value-of select="end_year"/><br/>
       <strong><xsl:value-of select="name"/></strong><br/>
-      <i><xsl:value-of select="place"/></i><br/>
+      <i><xsl:value-of select="university"/></i><br/>
       <xsl:value-of select="department"/>
     </li>
   </xsl:template>

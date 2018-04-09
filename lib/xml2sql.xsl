@@ -6,18 +6,13 @@
   <xsl:template name="alias">
     <xsl:param name="as" select="../@as"/>
     <xsl:param name="name" select="../@name"/>
-    <xsl:choose>
-      <xsl:when test="$as">
-        <xsl:value-of select="$as" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$name" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:if test="$as">
+      <xsl:value-of select="$as" />.
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="col">
-    `<xsl:call-template name="alias"/>.<xsl:value-of select="." />`<xsl:if test="@as"> AS `<xsl:value-of select="@as" />`</xsl:if>
+    `<xsl:call-template name="alias"/><xsl:value-of select="." />`<xsl:if test="@as"> AS `<xsl:value-of select="@as" />`</xsl:if>
   </xsl:template>
 
   <xsl:template match="select">
