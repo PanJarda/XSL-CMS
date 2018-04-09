@@ -5,22 +5,30 @@
     <col>position_name</col>
     <col>university</col>
     <col>department</col>
+    <col>lang</col>
   </table>
   <table name="academic_positions">
     <col>headline</col>
+    <col>lang</col>
   </table>
   <table name="bio" id="bio">
     <col>headline</col>
     <col>photo_url</col>
     <col>content</col>
+    <col>lang</col>
   </table>
   <table name="education">
     <col>headline</col>
+    <col>lang</col>
   </table>
   <table name="degree">
     <col>year</col>
     <col>degree</col>
     <col>university</col>
     <col>field</col>
+    <col>lang</col>
+  </table>
+  <table name="laborant">
+    <col>name</col>
   </table>
 </db>
