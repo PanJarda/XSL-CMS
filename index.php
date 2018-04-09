@@ -62,29 +62,26 @@ function processAllQueries($xmlDoc) {
   return $xmlDoc;
 }
 
-function applyTemplate($config, $xmlDoc) {
+function applyTemplate($config, $templatePath, $xmlDoc = NULL) {
   $data = new DOMDocument();
   $data->appendChild($data->importNode(dom_import_simplexml($config), true));
-  $xmlDocChildren = $xmlDoc->documentElement->childNodes;
-  for ($i = 0; $i < $xmlDocChildren->length; $i++) {
-    $data->documentElement->appendChild($data->importNode($xmlDocChildren->item($i), true));  
+  if ($xmlDoc) {
+    $data->documentElement->appendChild($data->importNode($xmlDoc->documentElement, true));
   }
-  
-  $x = $data->documentElement;
-  $templateTag = $x->getElementsByTagNameNS('data', 'template')->item(0);
-  $templateName = $templateTag->attributes['href']->value;
-  $data->documentElement->removeChild($templateTag);
-
-  $xsl = simplexml_load_file($templateName);
+  $xsl = simplexml_load_file($templatePath);
   $proc = new XSLTProcessor();
   $proc->importStylesheet($xsl);
   return $proc->transformToXML($data);
 }
 
-function test($config, $pathToData) {
-  $xmlDoc = new DOMDocument();
-  $xmlDoc->load($pathToData);
-  echo applyTemplate($config, processAllQueries($xmlDoc));
+function run($config, $templatePath, $pathToData = NULL) {
+  if ($pathToData) {
+    $xmlDoc = new DOMDocument();
+    $xmlDoc->load($pathToData);
+    echo applyTemplate($config, $templatePath, processAllQueries($xmlDoc));
+  } else {
+     echo applyTemplate($config, $templatePath);
+  }
 }
 ob_start();
 $config = simplexml_load_file("config.xml");
@@ -101,16 +98,16 @@ if ($GLOBALS['connection']->connect_error) {
 }
 
 $route = $config->xpath("/config/routes/route[@path='". $_SERVER['REQUEST_URI'] . "']")[0];
-$pathToData = $route['href'];
+$templatePath = $route['template'];
 
-if (!$pathToData) {
+if (!$templatePath) {
   $route = $config->xpath("/config/routes/route[@path='*']")[0];
-  if ($route['href'])
-    $pathToData = $route['href'];
-  else
-    $pathToData = 'index.xml';
+  $templatePath = $route['template'];
 }
 $route->addAttribute('active', 'active');
-$config->addChild('debug', ob_get_clean());
+$config->addChild('routeName', (string) $route);
+$pathToData = $route['data'];
+$output = ob_get_clean();
+$config->addChild('debug', $output);
 
-test($config, $pathToData);
+run($config, $templatePath, $pathToData);

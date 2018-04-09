@@ -4,13 +4,13 @@
   <xsl:template match="/config">
     <html>
       <head>
-        <title><xsl:value-of select="title"/> - <xsl:value-of select="brand"/></title>
+        <title><xsl:value-of select="routeName"/> - <xsl:value-of select="brand"/></title>
       </head>
       <body>
         <pre>
           <xsl:value-of select="debug"/>
         </pre>
-        <h1><xsl:value-of select="title"/></h1>
+        <h1><xsl:value-of select="routeName"/></h1>
         <xsl:apply-templates select="routes"/>
         <xsl:call-template name="main"/>
       </body>

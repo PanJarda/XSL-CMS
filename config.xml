@@ -3,15 +3,15 @@
   <brand>Jennifer Doe</brand>
   <layout href="layout.xsl"/>
   <routes>
-    <route path="/" priority="1000" href="data/index.xml">Home</route>
-    <route path="/about" priority="1000" href="data/about.xml">About Me</route>
-    <route path="/contact" priority="500">Contact &amp; Meet Me</route>
+    <route path="/" priority="1000" data="data/index.xml" template="templates/pages/index.xsl">Home</route>
+    <route path="/about" priority="1000" href="data/about.xml" template="templates/pages/about.xsl">About Me</route>
+    <route path="/contact" priority="500">Contact Me</route>
     <route path="/download" priority="400">Download CV</route>
-    <route path="/research" priority="900" href="data/research.xml">Research</route>
-    <route path="/publications" priority="800" href="data/publications.xml">Publications</route>
+    <route path="/research" priority="900" template="templates/pages/research.xsl">Research</route>
+    <route path="/publications" priority="800">Publications</route>
     <route path="/teaching" priority="700">Teaching</route>
     <route path="/gallery" priority="600">Gallery</route>
     <route path="/admin" hide="true" layout="admin-layout.xsl"/>
-    <route path="*" hide="true" href="data/404.xml"/>
+    <route path="*" hide="true" template="templates/pages/404.xsl">404</route>
   </routes>
 </config>
