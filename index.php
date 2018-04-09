@@ -80,7 +80,7 @@ function applyTemplate($xmlDoc) {
 
 function test() {
   $xmlDoc = new DOMDocument();
-  $xmlDoc->load("data.xml");
+  $xmlDoc->load("about.xml");
   echo applyTemplate(processAllQueries($xmlDoc));
 }
 

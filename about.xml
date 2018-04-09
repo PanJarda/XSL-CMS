@@ -18,5 +18,5 @@
   <lab_personel>
     <sql:import href="data/lab_personel.xml"/>
   </lab_personel>
-  <data:import href="data/lab_personel.xml"/>
+  <!--<data:import href="data/some_data.xml"/>-->
 </data>
