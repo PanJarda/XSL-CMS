@@ -1,5 +1,5 @@
 <config>
-  <db server="localhost" database="jennifer_doe" username="jennifer_doe" password="ahoj"/>
+  <db server="localhost" database="jennifer_doe" username="root" password=""/>
   <brand>Jennifer Doe</brand>
   <layout href="layout.xsl"/>
   <routes>
