@@ -1,0 +1,26 @@
+<db name="jennifer_doe">
+  <table name="academic_position" id="ap">
+    <col>end_year</col>
+    <col>start_year</col>
+    <col>position_name</col>
+    <col>university</col>
+    <col>department</col>
+  </table>
+  <table name="academic_positions">
+    <col>headline</col>
+  </table>
+  <table name="bio" id="bio">
+    <col>headline</col>
+    <col>photo_url</col>
+    <col>content</col>
+  </table>
+  <table name="education">
+    <col>headline</col>
+  </table>
+  <table name="degree">
+    <col>year</col>
+    <col>degree</col>
+    <col>university</col>
+    <col>field</col>
+  </table>
+</db>
