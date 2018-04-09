@@ -101,8 +101,8 @@ $pathToData = $route['href'];
 
 if (!$pathToData) {
   $route = $config->xpath("/config/routes/route[@path='*']")[0];
-  if ($error404['href'])
-    $pathToData = $error404;
+  if ($route['href'])
+    $pathToData = $route['href'];
   else
     $pathToData = 'index.xml';
 }
