@@ -1,0 +1,21 @@
+<data>
+  <template href="about.xsl"/>
+  <title>About Me</title>
+  <query>
+    <select name="academic_positions">
+      <col>start_year</col>
+      <col>end_year</col>
+      <col>position_name</col>
+      <col>university</col>
+      <col>department</col>
+    </select>
+  </query>
+  <photo href="/img.jpg"/>
+  <query>
+    <select name="texts" as="bio">
+      <col equals="bio">name</col>
+      <col>headline</col>
+      <col>content</col>
+    </select>
+  </query>
+</data>

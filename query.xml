@@ -1,0 +1,18 @@
+<query>
+  <select name="articles" as="a" limit="10" orderby="published" groupby="userId">
+    <count as="karma">Karma</count>
+    <col as="title">Title</col>
+    <col equals="Ahoj">Content</col>
+    <col id="published">Published</col>
+    <col id="userId" hide="true">UserId</col>
+    <col id="categoryId" hide="true">CategoryId</col>
+    <leftjoin name="users" as="u">
+      <col on="userId">id</col>
+      <col>Name</col>
+    </leftjoin>
+    <leftjoin name="categories" as="c">
+      <col on="categoryId" hide="true">id</col>
+      <col equals="research" hide="true">Name</col>
+    </leftjoin>
+  </select>
+</query>

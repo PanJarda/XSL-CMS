@@ -1,0 +1,15 @@
+<config>
+  <db server="localhost" database="jennifer_doe" username="jennifer_doe" password="ahoj"/>
+  <brand>Jennifer Doe</brand>
+  <layout href="layout.xsl"/>
+  <routes>
+    <route path="/contact" priority="500" href="contact.xml">Contact &amp; Meet Me</route>
+    <route path="/download" priority="400" href="download.xml">Download CV</route>
+    <route path="/about" priority="1000" href="about.xml">About Me</route>
+    <route path="/research" priority="900" href="research.xml">Research</route>
+    <route path="/publications" priority="800" href="publications.xml">Publications</route>
+    <route path="/teaching" priority="700" href="teaching.xml">Teaching</route>
+    <route path="/gallery" priority="600" href="gallery.xml">Gallery</route>
+    <route path="/admin" hide="true" layout="admin-layout.xsl"/>
+  </routes>
+</config>
