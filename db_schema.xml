@@ -31,4 +31,8 @@
   <table name="laborant">
     <col>name</col>
   </table>
+  <table name="user">
+    <col>username</col>
+    <col>password</col>
+  </table>
 </db>
