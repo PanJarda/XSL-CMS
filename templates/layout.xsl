@@ -1,7 +1,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-  <xsl:import href="partials/routes.xsl"/>
+  <xsl:output method="html" encoding="utf-8" indent="yes" />
+  <xsl:include href="partials/routes.xsl"/>
 
   <xsl:template match="/config">
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
     <html>
       <head>
         <title><xsl:value-of select="routeName"/> - <xsl:value-of select="brand"/></title>
