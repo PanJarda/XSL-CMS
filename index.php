@@ -36,7 +36,11 @@ function processAllQueries($xmlDoc) {
     $rowName = $queries->item($i)->attributes['item']->value;
     $query->appendChild($query->importNode($queries->item($i), true));
     $result = assoc2XML(sqlQuery($proc->transformToXML($query)), $queries->item($i)->parentNode->tagName, $rowName ? $rowName : 'item');
-    $x->replaceChild($xmlDoc->importNode(dom_import_simplexml($result), true), $queries->item($i)->parentNode);
+    $ch = dom_import_simplexml($result)->childNodes;
+    for ($j = 0; $j < $ch->length; $j++) {
+      $queries->item($i)->parentNode->appendChild($xmlDoc->importNode($ch->item($j), true));
+    }
+    $queries->item($i)->parentNode->removeChild($queries->item($i));
   }
 
   $queries = $x->getElementsByTagNameNS('sql', 'import');
@@ -44,7 +48,7 @@ function processAllQueries($xmlDoc) {
     $query = new DOMDocument();
     $query->load($queries->item($i)->attributes['href']->value);
     $rowName = $query->documentElement->attributes['item']->value;
-    $result = assoc2XML(sqlQuery($proc->transformToXML($query)), $queries->item($i)->parentNode->tagName, $rowName ? $rowName : 'item');
+    $result = assoc2XML(sqlQuery($proc->transformToXML($query)), 'tmp', $rowName ? $rowName : 'item');
     $x->replaceChild($xmlDoc->importNode(dom_import_simplexml($result), true), $queries->item($i)->parentNode);
   }
 
