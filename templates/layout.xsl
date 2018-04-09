@@ -19,7 +19,16 @@
             <xsl:value-of select="debug"/>
           </pre>
         </xsl:if>
-        <h1><xsl:value-of select="routeName"/></h1>
+        <h1>
+         <xsl:choose>
+            <xsl:when test="data/title">
+              <xsl:value-of select="data/title"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="routeName"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </h1>
         <xsl:apply-templates select="routes"/>
         <xsl:call-template name="main"/>
       </body>

@@ -1,4 +1,5 @@
 <data xmlns:sql="sql" xmlns:data="data">
+  <title>Jennifer Doe</title>
   <academic_positions>
     <headline>Academic positions</headline>
     <sql:query item="position">
