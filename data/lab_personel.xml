@@ -1,9 +1,0 @@
-<query item="position">
-  <select name="academic_positions">
-    <col>start_year</col>
-    <col>end_year</col>
-    <col>position_name</col>
-    <col>university</col>
-    <col>department</col>
-  </select>
-</query>
