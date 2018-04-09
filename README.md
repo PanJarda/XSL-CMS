@@ -10,3 +10,4 @@ todo:
  - active classu v menu by si mel resit ten template a ne router, tzn. predavat naky request_uri do dat
  - data pro template by mely zustat zapouzdrene v tagu <data> aby se predeslo konfliktu nazvu
  - route value predavat do dat, tim se da nahradit ten <title>
+ - v xsl templatech umoznit modifikovat headers abych mohl treba srat textovy output jako api nebo rss
