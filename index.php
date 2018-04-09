@@ -68,6 +68,7 @@ function applyTemplate($config, $templatePath, $xmlDoc = NULL) {
   if ($xmlDoc) {
     $data->documentElement->appendChild($data->importNode($xmlDoc->documentElement, true));
   }
+  //print_r($data->saveXML());
   $xsl = simplexml_load_file($templatePath);
   $proc = new XSLTProcessor();
   $proc->importStylesheet($xsl);
@@ -104,7 +105,7 @@ if (!$templatePath) {
   $route = $config->xpath("/config/routes/route[@path='*']")[0];
   $templatePath = $route['template'];
 }
-$route->addAttribute('active', 'active');
+$config->addChild('request_uri', $_SERVER['REQUEST_URI']);
 $config->addChild('routeName', (string) $route);
 $pathToData = $route['data'];
 $output = ob_get_clean();
