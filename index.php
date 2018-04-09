@@ -58,9 +58,9 @@ function processAllQueries($xmlDoc) {
   return $xmlDoc;
 }
 
-function applyTemplate($xmlDoc) {
+function applyTemplate($config, $xmlDoc) {
   $data = new DOMDocument();
-  $data->load("config.xml");
+  $data->appendChild($data->importNode(dom_import_simplexml($config), true));
   $xmlDocChildren = $xmlDoc->documentElement->childNodes;
   for ($i = 0; $i < $xmlDocChildren->length; $i++) {
     $data->documentElement->appendChild($data->importNode($xmlDocChildren->item($i), true));  
@@ -74,16 +74,15 @@ function applyTemplate($xmlDoc) {
   $xsl = simplexml_load_file($templateName);
   $proc = new XSLTProcessor();
   $proc->importStylesheet($xsl);
-  //print_r($data->saveXML());
   return $proc->transformToXML($data);
 }
 
-function test() {
+function test($config, $pathToData) {
   $xmlDoc = new DOMDocument();
-  $xmlDoc->load("about.xml");
-  echo applyTemplate(processAllQueries($xmlDoc));
+  $xmlDoc->load($pathToData);
+  echo applyTemplate($config, processAllQueries($xmlDoc));
 }
-
+ob_start();
 $config = simplexml_load_file("config.xml");
 $servername = $config->db['server'];
 $username = $config->db['username'];
@@ -97,4 +96,17 @@ if ($GLOBALS['connection']->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-test();
+$route = $config->xpath("/config/routes/route[@path='". $_SERVER['REQUEST_URI'] . "']")[0];
+$pathToData = $route['href'];
+
+if (!$pathToData) {
+  $route = $config->xpath("/config/routes/route[@path='*']")[0];
+  if ($error404['href'])
+    $pathToData = $error404;
+  else
+    $pathToData = 'index.xml';
+}
+$route->addAttribute('active', 'active');
+$config->addChild('debug', ob_get_clean());
+
+test($config, $pathToData);

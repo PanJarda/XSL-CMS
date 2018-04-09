@@ -5,9 +5,11 @@
     <html>
       <head>
         <title><xsl:value-of select="title"/> - <xsl:value-of select="brand"/></title>
-        <xsl:call-template name="style"/>
       </head>
       <body>
+        <pre>
+          <xsl:value-of select="debug"/>
+        </pre>
         <h1><xsl:value-of select="title"/></h1>
         <xsl:apply-templates select="routes"/>
         <xsl:call-template name="main"/>

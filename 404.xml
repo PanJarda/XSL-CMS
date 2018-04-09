@@ -1,0 +1,4 @@
+<data xmlns:sql="sql" xmlns:data="data">
+  <data:template href="templates/pages/404.xsl"/>
+  <title>404</title>
+</data>

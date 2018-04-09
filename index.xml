@@ -13,7 +13,7 @@
     </sql:query>
   </academic_positions>
   <bio>
-    <photo src="/img.jpg"/>
+    <photo src="static/img.jpg"/>
   </bio>
   <lab_personel>
     <sql:import href="data/lab_personel.xml"/>

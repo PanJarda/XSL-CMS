@@ -1,6 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"> 
   <xsl:template match="route">
-    <li><a href="{@path}"><xsl:value-of select="."/></a></li>
+    <li><a href="{@path}" class="{@active}"><xsl:value-of select="."/></a></li>
   </xsl:template>
 
   <xsl:template match="routes">
