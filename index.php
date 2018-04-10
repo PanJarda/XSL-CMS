@@ -100,12 +100,12 @@ if ($GLOBALS['connection']->connect_error) {
 }
 
 $route = $config->xpath("/config/routes/route[@path='". $_SERVER['REQUEST_URI'] . "']")[0];
-$templatePath = $route['template'];
-
-if (!$templatePath) {
+if (!$route) {
   $route = $config->xpath("/config/routes/route[@path='*']")[0];
-  $templatePath = $route['template'];
 }
+$templatePath = $route['template'] != NULL ? $route['template'] : $route->xpath("..")[0]['template'];
+
+
 $config->addChild('request_uri', $_SERVER['REQUEST_URI']);
 $config->addChild('routeName', (string) $route);
 $pathToData = $route['data'];

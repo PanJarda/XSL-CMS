@@ -6,7 +6,7 @@
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
     <html>
       <head>
-        <title><xsl:value-of select="routeName"/> - <xsl:value-of select="data/brand"/></title>
+        <title><xsl:value-of select="routeName"/> - <xsl:value-of select="(data/brand)[last()]"/></title>
         <style>
           .active {
             color: green;
@@ -22,7 +22,7 @@
         <h1>
          <xsl:choose>
             <xsl:when test="data/title">
-              <xsl:value-of select="data/title"/>
+              <xsl:value-of select="(data/title)[last()]"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="routeName"/>
