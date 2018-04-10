@@ -1,7 +1,7 @@
 <config>
   <routes template="templates/pages/index.xsl">
     <route path="/" priority="1000" data="data/index.xml">Home</route>
-    <route path="/about" priority="1000">About Me</route>
+    <route path="/:lang/about" priority="1000">About Me</route>
     <route path="/contact" priority="500">Contact Me</route>
     <route path="/download" priority="400">Download CV</route>
     <route path="/research" priority="900">Research</route>
