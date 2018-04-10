@@ -14,4 +14,49 @@
     <route path="/admin" hide="true" layout="admin-layout.xsl"/>
     <route path="*" hide="true" template="templates/pages/404.xsl">404</route>
   </routes>
+  <db name="jennifer_doe">
+    <table name="langs" on-delete="cascade">
+      <col id="langId" primary="true" autoincrement="true">id</col>
+      <col>name</col>
+    </table>
+    <table name="academic_position" id="ap">
+      <col>end_year</col>
+      <col>start_year</col>
+      <col>position_name</col>
+      <col>university</col>
+      <col>department</col>
+      <col many-to-one="langId">langId</col>
+    </table>
+    <table name="academic_positions">
+      <col>headline</col>
+      <col many-to-one="lang">lang</col>
+    </table>
+    <table name="bio" id="bio">
+      <col>headline</col>
+      <col>photo_url</col>
+      <col>content</col>
+      <col many-to-one="langId">lang</col>
+    </table>
+    <table name="education">
+      <col>headline</col>
+      <col many-to-one="langId">langId</col>
+    </table>
+    <table name="degree">
+      <col>year</col>
+      <col>degree</col>
+      <col>university</col>
+      <col>field</col>
+      <col many-to-one="langId">lang</col>
+    </table>
+    <table name="article">
+      <col>headline</col>
+      <col>content</col>
+      <col many-to-many="userId">authorId</col>
+    </table>
+    <table name="user">
+      <col id="userId">id</col>
+      <col>username</col>
+      <col>password</col>
+    </table>
+  </db>
 </config>
