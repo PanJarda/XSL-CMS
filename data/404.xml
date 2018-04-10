@@ -1,3 +1,6 @@
 <data xmlns:sql="sql" xmlns:data="data">
   <description>404</description>
+  <data:entity name="article" limit="10">
+    <where ref="lang.name" equals="cs"/>
+  </data:entity>
 </data>

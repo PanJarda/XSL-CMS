@@ -12,11 +12,10 @@
     <route path="*" hide="true" data="data/404.xml">404</route>
   </routes>
   <db name="jennifer_doe" server="localhost" username="root" password="">
-    <table name="langs" on-delete="cascade">
-      <col id="langId" primary="true" autoincrement="true">id</col>
+    <table name="lang" on-delete="cascade">
       <col>name</col>
     </table>
-    <table name="academic_position" id="ap">
+    <table name="academic_position">
       <col>end_year</col>
       <col>start_year</col>
       <col>position_name</col>
@@ -26,29 +25,29 @@
     </table>
     <table name="academic_positions">
       <col>headline</col>
-      <col many-to-one="lang">lang</col>
+      <col many-to-one="langId">lang</col>
     </table>
-    <table name="bio" id="bio">
+    <table name="bio">
       <col>headline</col>
       <col>photo_url</col>
       <col>content</col>
-      <col many-to-one="langId">lang</col>
+      <col many-to-one="lang">lang</col>
     </table>
     <table name="education">
       <col>headline</col>
-      <col many-to-one="langId">langId</col>
+      <col many-to-one="lang">langId</col>
     </table>
     <table name="degree">
       <col>year</col>
       <col>degree</col>
       <col>university</col>
       <col>field</col>
-      <col many-to-one="langId">lang</col>
+      <col many-to-one="lang/id">lang</col>
     </table>
     <table name="article">
       <col>headline</col>
       <col>content</col>
-      <col many-to-many="userId">authorId</col>
+      <col many-to-many="lang">authorId</col>
     </table>
     <table name="user">
       <col id="userId">id</col>
