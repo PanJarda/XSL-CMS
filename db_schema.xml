@@ -1,6 +1,6 @@
 <db name="jennifer_doe">
-  <table name="langs">
-    <col id="langId">id</col>
+  <table name="langs" on-delete="cascade">
+    <col id="langId" primary="true" autoincrement="true">id</id>
     <col>name</col>
   </table>
   <table name="academic_position" id="ap">
@@ -31,9 +31,6 @@
     <col>university</col>
     <col>field</col>
     <col many-to-one="langId">lang</col>
-  </table>
-  <table name="laborant">
-    <col>name</col>
   </table>
   <table name="article">
     <col>headline</col>
