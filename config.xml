@@ -1,7 +1,4 @@
 <config>
-  <db server="localhost" database="jennifer_doe" username="root" password=""/>
-  <brand>Jennifer Doe</brand>
-  <layout href="layout.xsl"/>
   <routes>
     <route path="/" priority="1000" data="data/index.xml" template="templates/pages/index.xsl">Home</route>
     <route path="/about" priority="1000" href="data/about.xml" template="templates/pages/about.xsl">About Me</route>
@@ -14,7 +11,7 @@
     <route path="/admin" hide="true" layout="admin-layout.xsl"/>
     <route path="*" hide="true" template="templates/pages/404.xsl">404</route>
   </routes>
-  <db name="jennifer_doe">
+  <db name="jennifer_doe" server="localhost" username="root" password=""/>
     <table name="langs" on-delete="cascade">
       <col id="langId" primary="true" autoincrement="true">id</col>
       <col>name</col>
@@ -59,4 +56,7 @@
       <col>password</col>
     </table>
   </db>
+  <data>
+    <brand>Jennifer Doe</brand>
+  </data>
 </config>
