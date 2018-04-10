@@ -20,7 +20,9 @@
     </content>
   </bio>
   <!-- future entity usage example -->
-  <data:entity name="academic_positions">
-    <data:entity name="position"/>
+  <data:entity name="academic_positions" limit="10" orderby="start_year">
+    <where>
+      <col equals="23">ahoj</col>
+    </where>
   </data:entity>
 </data>
