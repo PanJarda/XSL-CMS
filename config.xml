@@ -11,7 +11,7 @@
     <route path="/admin" hide="true" layout="admin-layout.xsl"/>
     <route path="*" hide="true" template="templates/pages/404.xsl">404</route>
   </routes>
-  <db name="jennifer_doe" server="localhost" username="root" password=""/>
+  <db name="jennifer_doe" server="localhost" username="root" password="">
     <table name="langs" on-delete="cascade">
       <col id="langId" primary="true" autoincrement="true">id</col>
       <col>name</col>

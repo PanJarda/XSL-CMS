@@ -6,7 +6,7 @@
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
     <html>
       <head>
-        <title><xsl:value-of select="routeName"/> - <xsl:value-of select="brand"/></title>
+        <title><xsl:value-of select="routeName"/> - <xsl:value-of select="data/brand"/></title>
         <style>
           .active {
             color: green;

@@ -90,7 +90,7 @@ $config = simplexml_load_file("config.xml");
 $servername = $config->db['server'];
 $username = $config->db['username'];
 $password = $config->db['password'];
-$db=  $config->db['database'];
+$db=  $config->db['name'];
 $conn = new mysqli($servername, $username, $password);
 $GLOBALS['connection'] = $conn;
 $GLOBALS['connection']->select_db($db);
