@@ -37,3 +37,5 @@ todo:
   za dolarama jsou nazvy dat co prichazi v postu a predavaji se automaticky do te sablony (tzn ze musim vzit sablonu a rozsirit ji za behu o prvky xsl:param s tema nazvama a potom zavolat;
   vypada to jako hovno tak to mozna udelam nejak jinak.
 
+  asio jo musi tam byt nakej jasnej flow `[ data z post a get uloz do xml ] -> [ pridej data z configu ] -> [ proved xslt pro ukladani a validovani dat ] -> [ zobraz template ]`
+
