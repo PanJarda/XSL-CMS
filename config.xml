@@ -1,4 +1,6 @@
 <config>
+
+  <!-- sitemap -->
   <routes template="templates/pages/index.xsl">
     <route path="/" data="data/index.xml">Home</route>
     <route path="/:lang/about">About Me</route>
@@ -8,9 +10,11 @@
     <route path="/publications">Publications</route>
     <route path="/teaching">Teaching</route>
     <route path="/gallery">Gallery</route>
-    <route path="/admin" hide="true" template="admin.xsl"/>
+    <route path="/admin" hide="true" template="templates/pages/admin.xsl">Admin</route>
     <route path="*" hide="true" data="data/404.xml">404</route>
   </routes>
+
+  <!-- schema databaze -->
   <db name="jennifer_doe" server="localhost" username="root" password="">
     <table name="lang" on-delete="cascade">
       <col>name</col>
@@ -23,7 +27,37 @@
       <col>ahoj</col>
       <col many-to-one="lang">langId</col>
     </table>
+    <table name="academic_position">
+      <col type="year">start_year</col>
+      <col type="year">end_year</col>
+      <col>position_name</col>
+      <col>university</col>
+      <col>department</col>
+      <col many-to-one="lang">langId</col>
+    </table>
+    <table name="product">
+      <col>type</col>
+      <col>name</col>
+      <col type="text">desc</col>
+      <col>price</col>
+      <col>category</col>
+      <col type="json">specs</col>
+      <col many-to-one="category">categoryId</col>
+    </table>
+    <table name="category" on-delete="cascade">
+      <col>name</col>
+    </table>
+    <table name="invoice">
+      <col many-to-many="product">productId</col>
+      <col many-to-one="customer">customerId</col>
+    </table>
+    <table name="customer">
+      <col>name</col>
+      <col>address</col>
+    </table>
   </db>
+
+  <!-- tato data se daji prepsat v <data> pro danou podstranku -->
   <data>
     <brand>Jennifer Doe</brand>
   </data>

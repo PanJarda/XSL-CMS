@@ -3,7 +3,7 @@
   <academic_positions>
     <headline>Academic positions</headline>
     <sql:query item="position">
-      <select name="academic_positions">
+      <select name="academic_position">
         <col>start_year</col>
         <col>end_year</col>
         <col as="name">position_name</col>

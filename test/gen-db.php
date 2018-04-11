@@ -3,7 +3,8 @@ $proc = new XSLTProcessor();
 
 $proc->importStylesheet(
   simplexml_load_file("../lib/gen-db.xsl"));
-
-print_r($proc->hasExsltSupport());
+if ($argv[1] == '--drop') {
+  $proc->setParameter('', 'drop', '1');
+}
 echo $proc->transformToXML(
   simplexml_load_file('../config.xml'));
