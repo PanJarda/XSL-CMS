@@ -42,4 +42,8 @@ todo:
   [ data z post a get uloz do xml ] -> [ ukladani a validovani dat ] -> [ kod pro fetch dat z db ] -> [ zobraz template ]
   ```
   tenhle flow probehne pokazde kdyz uzivatel pristoupi na routu, podle configu se pripadne preskoci cast ukladani dat pokud se nepotrebuji zadna data zpracovat.
-
+  proste se nejdriv zpracujou data ze vsech postu a getu co jdou na routu pokud zadny data najsou tak se proste vysere template
+  to odpovida tem pripadum kdy neni potreba zpracovat data
+  a kdyz je naka routa typu objednavka tak kdyz neprijdou data tak se vysere template s formem klasicky a on ji odesle tu obednavku a to se zase skoci na tu stejnou routu ale tentokrat s datama a ty se ulozi
+  a ten zpusob ulozeni dat je proste inverzni tomu kroku dolovani dat z db
+  takze vlastne je to opacnej problem jako tahani dat z db
