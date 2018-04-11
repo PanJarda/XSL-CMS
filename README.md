@@ -41,4 +41,5 @@ todo:
   ```
   [ data z post a get uloz do xml ] -> [ ukladani a validovani dat ] -> [ kod pro fetch dat z db ] -> [ zobraz template ]
   ```
+  tenhle flow probehne pokazde kdyz uzivatel pristoupi na routu, podle configu se pripadne preskoci cast ukladani dat pokud se nepotrebuji zadna data zpracovat.
 
