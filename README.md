@@ -21,7 +21,7 @@ todo:
   dale tam muze byt uveden mapping prichazejicich dat pres post na entity: <data:map value="blabla" to="product.feedback">
   validace se budou brat podle toho co je ve shematu v entitach. 
   tzn. ze pokud budu chtit zprovoznit adminko tak si ve schematu zadefinuju users a pripadne role a skupiny a provazuje a potom v route admin budu mit data-file s podminkou <data:entity user in group> ale to musim vymyslet jak jeste asi jakoze se prislusnej post param porovna s datama z entity. a podle toho se rozhodne. Ty podminky muzou byt teoreticky docela komplexni take to promyslet
-  ```
+  ```xml
   <data:auth>
     <data:entity name="user" where="group = 'admin' and username='$username' AND pass = password($password)">
     <data:entity name="user" where="group = 'admin' and cookie='$cookie'">
@@ -37,5 +37,8 @@ todo:
   za dolarama jsou nazvy dat co prichazi v postu a predavaji se automaticky do te sablony (tzn ze musim vzit sablonu a rozsirit ji za behu o prvky xsl:param s tema nazvama a potom zavolat;
   vypada to jako hovno tak to mozna udelam nejak jinak.
 
-  asio jo musi tam byt nakej jasnej flow `[ data z post a get uloz do xml ] -> [ ukladani a validovani dat ] -> [ kod pro fetch dat z db ] -> [ zobraz template ]`
+  asio jo musi tam byt nakej jasnej flow
+  ```
+  [ data z post a get uloz do xml ] -> [ ukladani a validovani dat ] -> [ kod pro fetch dat z db ] -> [ zobraz template ]
+  ```
 
