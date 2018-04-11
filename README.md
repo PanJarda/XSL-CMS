@@ -32,7 +32,8 @@ todo:
 
   potom prichazejici data se automaticky mapujou oproti entitam co jsou pridane tady ve vyberu
   ```
-  <data:entity name="objednavka" values="userid = $user"/>
+  <data:entity name="objednavka" cols="user" values="$user"/>
   ```
   za dolarama jsou nazvy dat co prichazi v postu a predavaji se automaticky do te sablony (tzn ze musim vzit sablonu a rozsirit ji za behu o prvky xsl:param s tema nazvama a potom zavolat;
+  vypada to jako hovno tak to mozna udelam nejak jinak.
 
