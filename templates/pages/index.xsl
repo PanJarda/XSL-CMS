@@ -2,7 +2,7 @@
   <xsl:include href="../layout.xsl"/>
   <xsl:include href="../partials/academic_positions.xsl"/>
   <xsl:include href="../partials/bio.xsl"/>
-  
+
   <xsl:template name="main">
     <xsl:value-of select="(data/description)[last()]"/>
     <xsl:apply-templates select="data/bio"/>

@@ -105,7 +105,6 @@ if (!$route) {
 }
 $templatePath = $route['template'] != NULL ? $route['template'] : $route->xpath("..")[0]['template'];
 
-
 $config->addChild('request_uri', $_SERVER['REQUEST_URI']);
 $config->addChild('routeName', (string) $route);
 $pathToData = $route['data'];
