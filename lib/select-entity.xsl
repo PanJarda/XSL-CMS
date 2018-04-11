@@ -4,6 +4,8 @@
   <xsl:param name="limit"/>
   <xsl:param name="where"/>
   <xsl:param name="equals"/>
+  <xsl:param name="orderby"/>
+  <xsl:param name="groupby"/>
 
   <xsl:template match="@many-to-many">
     <!-- todo handle junction table -->

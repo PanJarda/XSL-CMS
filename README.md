@@ -11,3 +11,5 @@ todo:
   - [ ] rekurzivni routy
   - [ ] parametrizovane routy +
   - [ ] parametrizovane datove templaty napr. pro preklady (pres <data:param select="xpath query"> pripadne {xpath})
+  - [ ] add junction table to entities
+  - [ ] rename entittes model from tables to entities and fields
