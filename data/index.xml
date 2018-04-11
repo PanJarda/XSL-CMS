@@ -20,9 +20,11 @@
     </content>
   </bio>
   <!-- future entity usage example -->
-  <data:entity name="academic_positions" limit="10" orderby="start_year">
-    <where>
-      <col equals="23">ahoj</col>
-    </where>
-  </data:entity>
+  <data:entity
+    name="article"
+    orderby="date_published"
+    cols="title, content, authorName"
+    where="lang = 'cs'"
+    limit="10"
+  />
 </data>

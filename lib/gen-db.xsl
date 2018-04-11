@@ -1,5 +1,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:output method="text" indent="no"/>
+  <xsl:key name="name" match="table" use="@name"/>
 
   <xsl:template match="@many-to-many">
     <!-- todo create junction table -->
@@ -7,7 +8,11 @@
 
   <xsl:template match="@many-to-one">
     FOREIGN KEY (`<xsl:value-of select=".."/>`)
-    REFERENCES `<xsl:value-of select="."/>`(`id`),
+    REFERENCES `<xsl:value-of select="."/>`(`id`)
+    <xsl:if test="key('name', .)/@on-delete">
+      ON DELETE <xsl:value-of select="key('name', .)/@on-delete"/>
+    </xsl:if>
+    ,
   </xsl:template>
 
   <xsl:template match="col">
@@ -18,6 +23,9 @@
     </xsl:if>
     <xsl:if test="not(@nullable)">
       NOT NULL
+    </xsl:if>
+    <xsl:if test="@many-to-one">
+      int(10) unsigned
     </xsl:if>
     ,
     <xsl:apply-templates select="@many-to-one"/>

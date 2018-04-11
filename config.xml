@@ -17,7 +17,11 @@
     </table>
     <table name="education">
       <col>headline</col>
-      <col many-to-one="lang" type="int(10) unsigned">langId</col>
+      <col many-to-one="lang">langId</col>
+    </table>
+    <table name="ahoj">
+      <col>ahoj</col>
+      <col many-to-one="lang">langId</col>
     </table>
   </db>
   <data>
