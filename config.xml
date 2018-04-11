@@ -48,7 +48,7 @@
       <col>name</col>
     </table>
     <table name="invoice">
-      <col many-to-many="product">productId</col>
+      <col many-to-many="product">productId<col>
       <col many-to-one="customer">customerId</col>
     </table>
     <table name="customer">
