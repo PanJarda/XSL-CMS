@@ -4,13 +4,7 @@
   <routes template="templates/pages/index.xsl">
     <route path="/" data="data/index.xml">Home</route>
     <route path="/:lang/about">About Me</route>
-    <route path="/contact">Contact Me</route>
-    <route path="/download">Download CV</route>
-    <route path="/research">Research</route>
-    <route path="/publications">Publications</route>
-    <route path="/teaching">Teaching</route>
-    <route path="/gallery">Gallery</route>
-    <route path="/admin" hide="true" template="templates/pages/admin.xsl">Admin</route>
+    <route path="/admin/:tabulka" hide="true" template="templates/pages/admin.xsl">Admin</route>
     <route path="*" hide="true" data="data/404.xml">404</route>
   </routes>
 
@@ -27,6 +21,9 @@
       <col>ahoj</col>
       <col many-to-one="lang">langId</col>
     </table>
+    <table name="category" on-delete="cascade">
+      <col>name</col>
+    </table>
     <table name="academic_position">
       <col type="year">start_year</col>
       <col type="year">end_year</col>
@@ -41,19 +38,16 @@
       <col type="text">desc</col>
       <col>price</col>
       <col>category</col>
-      <col type="json">specs</col>
+      <col type="text">specs</col>
       <col many-to-one="category">categoryId</col>
-    </table>
-    <table name="category" on-delete="cascade">
-      <col>name</col>
-    </table>
-    <table name="invoice">
-      <col many-to-many="product">productId<col>
-      <col many-to-one="customer">customerId</col>
     </table>
     <table name="customer">
       <col>name</col>
       <col>address</col>
+    </table>
+    <table name="invoice">
+      <col many-to-many="product">productId</col>
+      <col many-to-one="customer">customerId</col>
     </table>
   </db>
 

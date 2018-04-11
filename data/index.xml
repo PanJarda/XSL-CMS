@@ -1,30 +1,61 @@
-<data xmlns:sql="sql" xmlns:data="data">
-  <title>Jennifer Doe</title>
-  <academic_positions>
-    <headline>Academic positions</headline>
-    <sql:query item="position">
-      <select name="academic_position">
-        <col>start_year</col>
-        <col>end_year</col>
-        <col as="name">position_name</col>
-        <col>university</col>
-        <col>department</col>
-      </select>
-    </sql:query>
-  </academic_positions>
-  <bio>
-    <headline>Bio</headline>
-    <photo src="static/img.jpg"/>
-    <content>
-      A social psychfsfsdologist and marketer, Jennifer Doe is the General Atlantic Professor of Marketing and Ormond Family Faculty at Stanford University’s Graduate School of Business. Her research spans time, money and happiness. She focuses on questions such as: What actually makes people happy, as opposed to what they think makes them happy?
-    </content>
-  </bio>
-  <!-- future entity usage example -->
-  <data:entity
-    name="article"
-    orderby="date_published"
-    cols="title, content, authorName"
-    where="lang = 'cs'"
-    limit="10"
-  />
-</data>
+<!-- input
+<params>
+  <get name="lang">cs</get>
+  <cookie>fdsfafs</cookie>
+</params>
+-->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+
+  <xsl:template match="validate_request">
+    <auth>
+      <data:entity
+        cols="count(*)"
+        name="users"
+        where="session = '{get[@cookie]}' and group = 'admin'">
+    </auth>
+    <data:template path="{get["/>
+  </xsl:template>
+
+  <xsl:template match="store_data">
+    <data:cond test="auth gt; 0"/>
+    <data:persist
+      name="article"
+      orderby="date_published"
+      cols="title, content, authorName"
+      where="lang.name = '{get[@name="lang"]}'"
+      limit="10"
+    />
+  </xsl:template>
+  
+  <xsl:template match="render_output">
+    <data>
+      <title>Jennifer Doe</title>
+      <academic_positions>
+        <headline>Academic positions</headline>
+        <sql:query item="position">
+          <select name="academic_position">
+            <col>start_year</col>
+            <col>end_year</col>
+            <col as="name">position_name</col>
+            <col>university</col>
+            <col>department</col>
+          </select>
+        </sql:query>
+      </academic_positions>
+      <articles>
+        <data:entity name="articles"/>
+        <entity:entity
+          name="article"
+          orderby="date_published"
+          cols="title, content, authorName"
+          where="lang.name = '{get[@name='lang']}'"
+          limit="10"
+        />
+      </articles>
+    </data>
+  </xsl:template>
+
+  <xsl:template match="/">
+    <xsl:apply-templates />
+  </xsl:template>
+</xsl:stylesheet>
