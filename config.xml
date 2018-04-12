@@ -9,7 +9,7 @@
   </routes>
 
   <!-- schema databaze -->
-  <db name="jennifer_doe" server="localhost" username="root" password="">
+  <db name="eshop" server="localhost" username="root" password="">
     <table name="lang" on-delete="cascade">
       <col>name</col>
     </table>
@@ -76,6 +76,12 @@
       <many-to-many table="invoice"/>
     </table>
   </db>
+
+  <data-flow-hook>
+    <hook>validate_request</hook>
+    <hook>store_data</hook>
+    <hook>render_output</hook>
+  </data-flow>
 
   <!-- tato data se daji prepsat v <data> pro danou podstranku -->
   <data>

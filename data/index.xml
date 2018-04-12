@@ -4,6 +4,13 @@
   <cookie>fdsfafs</cookie>
 </params>
 -->
+<!-- tahle deklarace muze prepsat standardni flow z configu -->
+<data-flow-hook>
+  <hook>validate_request</hook>
+  <hook>store_data</hook>
+  <hook>render_output</hook>
+</data-flow>
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
   <xsl:template match="validate_request">
