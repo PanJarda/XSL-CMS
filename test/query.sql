@@ -20,12 +20,12 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `education`;
+      DROP TABLE IF EXISTS `permission`;
     
-    CREATE TABLE `education` (
+    CREATE TABLE `permission` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       
-    `headline`
+    `name`
     
       VARCHAR(255)
     
@@ -33,56 +33,18 @@
     
     ,
     
-    `langId`
-    
-      int(10) unsigned
-    
+    `description`
+    text
       NOT NULL
     
     ,
     
-    FOREIGN KEY (`langId`)
-    REFERENCES `lang`(`id`)
-    
-      ON DELETE cascade
-    ,
-  
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `ahoj`;
+      DROP TABLE IF EXISTS `role`;
     
-    CREATE TABLE `ahoj` (
-      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `ahoj`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `langId`
-    
-      int(10) unsigned
-    
-      NOT NULL
-    
-    ,
-    
-    FOREIGN KEY (`langId`)
-    REFERENCES `lang`(`id`)
-    
-      ON DELETE cascade
-    ,
-  
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-  
-      DROP TABLE IF EXISTS `category`;
-    
-    CREATE TABLE `category` (
+    CREATE TABLE `role` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       
     `name`
@@ -96,24 +58,12 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `academic_position`;
+      DROP TABLE IF EXISTS `group`;
     
-    CREATE TABLE `academic_position` (
+    CREATE TABLE `group` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       
-    `start_year`
-    year
-      NOT NULL
-    
-    ,
-    
-    `end_year`
-    year
-      NOT NULL
-    
-    ,
-    
-    `position_name`
+    `name`
     
       VARCHAR(255)
     
@@ -121,7 +71,15 @@
     
     ,
     
-    `university`
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+      DROP TABLE IF EXISTS `user`;
+    
+    CREATE TABLE `user` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      
+    `first_name`
     
       VARCHAR(255)
     
@@ -129,7 +87,7 @@
     
     ,
     
-    `department`
+    `last_name`
     
       VARCHAR(255)
     
@@ -137,18 +95,116 @@
     
     ,
     
-    `langId`
+    `nick`
     
-      int(10) unsigned
+      VARCHAR(255)
     
       NOT NULL
     
     ,
     
-    FOREIGN KEY (`langId`)
+    `email`
+    
+      VARCHAR(255)
+    
+      NOT NULL
+    
+    ,
+    
+    `password`
+    
+      VARCHAR(255)
+    
+      NOT NULL
+    
+    ,
+    
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+      DROP TABLE IF EXISTS `product_category`;
+    
+    CREATE TABLE `product_category` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      
+    `name`
+    
+      VARCHAR(255)
+    
+      NOT NULL
+    
+    ,
+    
+    `lang_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`lang_id`)
     REFERENCES `lang`(`id`)
     
-      ON DELETE cascade
+    ,
+  
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+      DROP TABLE IF EXISTS `product_attribute_value`;
+    
+    CREATE TABLE `product_attribute_value` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      
+    `name`
+    
+      VARCHAR(255)
+    
+      NOT NULL
+    
+    ,
+    
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+      DROP TABLE IF EXISTS `product_attribute_type`;
+    
+    CREATE TABLE `product_attribute_type` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      
+    `name`
+    
+      VARCHAR(255)
+    
+      NOT NULL
+    
+    ,
+    
+    `lang_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`lang_id`)
+    REFERENCES `lang`(`id`)
+    
+    ,
+  
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+      DROP TABLE IF EXISTS `product_attribute`;
+    
+    CREATE TABLE `product_attribute` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      
+    `name`
+    
+      VARCHAR(255)
+    
+      NOT NULL
+    
+    ,
+    
+    `product_attribute_type_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`product_attribute_type_id`)
+    REFERENCES `product_attribute_type`(`id`)
+    
+    ,
+  
+    `lang_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`lang_id`)
+    REFERENCES `lang`(`id`)
+    
     ,
   
       PRIMARY KEY (`id`)
@@ -159,7 +215,41 @@
     CREATE TABLE `product` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       
-    `type`
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+      DROP TABLE IF EXISTS `chart`;
+    
+    CREATE TABLE `chart` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      
+    `product_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`product_id`)
+    REFERENCES `product`(`id`)
+    
+    ,
+  
+    `product_attribute_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`product_attribute_id`)
+    REFERENCES `product_attribute`(`id`)
+    
+    ,
+  
+    `product_attribute_value_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`product_attribute_value_id`)
+    REFERENCES `product_attribute_value`(`id`)
+    
+    ,
+  
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+      DROP TABLE IF EXISTS `invoice`;
+    
+    CREATE TABLE `invoice` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      
+    `shipping_details`
     
       VARCHAR(255)
     
@@ -167,54 +257,10 @@
     
     ,
     
-    `name`
+    `chart_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`chart_id`)
+    REFERENCES `chart`(`id`)
     
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `desc`
-    text
-      NOT NULL
-    
-    ,
-    
-    `price`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `category`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `specs`
-    text
-      NOT NULL
-    
-    ,
-    
-    `categoryId`
-    
-      int(10) unsigned
-    
-      NOT NULL
-    
-    ,
-    
-    FOREIGN KEY (`categoryId`)
-    REFERENCES `category`(`id`)
-    
-      ON DELETE cascade
     ,
   
       PRIMARY KEY (`id`)
@@ -241,36 +287,90 @@
     
     ,
     
-      PRIMARY KEY (`id`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-  
-      DROP TABLE IF EXISTS `invoice`;
-    
-    CREATE TABLE `invoice` (
-      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `customerId`
-    
-      int(10) unsigned
-    
-      NOT NULL
+    `user_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`user_id`)
+    REFERENCES `user`(`id`)
     
     ,
-    
-    FOREIGN KEY (`customerId`)
-    REFERENCES `customer`(`id`)
+  
+    `chart_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`chart_id`)
+    REFERENCES `chart`(`id`)
     
     ,
   
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-    CREATE table invoice_x_product (
-      invoice int(10) unsigned NOT NULL,
-      product int(10) unsigned NOT NULL,
-      FOREIGN KEY (`invoice`)
-      REFERENCES `invoice`(`id`),
-      FOREIGN KEY (`product`)
-      REFERENCES `product`(`id`)
+    CREATE table role_x_permission (
+      `role_id` int(10) unsigned NOT NULL,
+      `permission_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`role_id`)
+      REFERENCES `role`(`id`),
+      FOREIGN KEY (`permission_id`)
+      REFERENCES `permission`(`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+    CREATE table group_x_role (
+      `group_id` int(10) unsigned NOT NULL,
+      `role_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`group_id`)
+      REFERENCES `group`(`id`),
+      FOREIGN KEY (`role_id`)
+      REFERENCES `role`(`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+    CREATE table user_x_group (
+      `user_id` int(10) unsigned NOT NULL,
+      `group_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`user_id`)
+      REFERENCES `user`(`id`),
+      FOREIGN KEY (`group_id`)
+      REFERENCES `group`(`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+    CREATE table product_attribute_value_x_lang (
+      `product_attribute_value_id` int(10) unsigned NOT NULL,
+      `lang_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`product_attribute_value_id`)
+      REFERENCES `product_attribute_value`(`id`),
+      FOREIGN KEY (`lang_id`)
+      REFERENCES `lang`(`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+    CREATE table product_attribute_x_product_attribute_value (
+      `product_attribute_id` int(10) unsigned NOT NULL,
+      `product_attribute_value_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`product_attribute_id`)
+      REFERENCES `product_attribute`(`id`),
+      FOREIGN KEY (`product_attribute_value_id`)
+      REFERENCES `product_attribute_value`(`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+    CREATE table product_x_product_category (
+      `product_id` int(10) unsigned NOT NULL,
+      `product_category_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`product_id`)
+      REFERENCES `product`(`id`),
+      FOREIGN KEY (`product_category_id`)
+      REFERENCES `product_category`(`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+    CREATE table product_x_product_attribute (
+      `product_id` int(10) unsigned NOT NULL,
+      `product_attribute_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`product_id`)
+      REFERENCES `product`(`id`),
+      FOREIGN KEY (`product_attribute_id`)
+      REFERENCES `product_attribute`(`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
+    CREATE table customer_x_invoice (
+      `customer_id` int(10) unsigned NOT NULL,
+      `invoice_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`customer_id`)
+      REFERENCES `customer`(`id`),
+      FOREIGN KEY (`invoice_id`)
+      REFERENCES `invoice`(`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   

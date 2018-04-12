@@ -3,20 +3,21 @@
   <xsl:param name="drop"/>
   <xsl:key name="name" match="table" use="@name"/>
 
-  <xsl:template match="col[@many-to-many]">
-    CREATE table <xsl:value-of select="../@name"/>_x_<xsl:value-of select="@many-to-many"/> (
-      <xsl:value-of select="../@name"/> int(10) unsigned NOT NULL,
-      <xsl:value-of select="@many-to-many"/> int(10) unsigned NOT NULL,
-      FOREIGN KEY (`<xsl:value-of select="../@name"/>`)
+  <xsl:template match="many-to-many">
+    CREATE table <xsl:value-of select="../@name"/>_x_<xsl:value-of select="@table"/> (
+      `<xsl:value-of select="../@name"/>_id` int(10) unsigned NOT NULL,
+      `<xsl:value-of select="@table"/>_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`<xsl:value-of select="../@name"/>_id`)
       REFERENCES `<xsl:value-of select="../@name"/>`(`id`),
-      FOREIGN KEY (`<xsl:value-of select="@many-to-many"/>`)
-      REFERENCES `<xsl:value-of select="@many-to-many"/>`(`id`)
+      FOREIGN KEY (`<xsl:value-of select="@table"/>_id`)
+      REFERENCES `<xsl:value-of select="@table"/>`(`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   </xsl:template>
 
-  <xsl:template match="@many-to-one">
-    FOREIGN KEY (`<xsl:value-of select=".."/>`)
-    REFERENCES `<xsl:value-of select="."/>`(`id`)
+  <xsl:template match="many-to-one">
+    `<xsl:value-of select="@table"/>_id` int(10) unsigned NOT NULL,
+    FOREIGN KEY (`<xsl:value-of select="@table"/>_id`)
+    REFERENCES `<xsl:value-of select="@table"/>`(`id`)
     <xsl:if test="key('name', .)/@on-delete">
       ON DELETE <xsl:value-of select="key('name', .)/@on-delete"/>
     </xsl:if>
@@ -46,7 +47,8 @@
     </xsl:if>
     CREATE TABLE `<xsl:value-of select="@name"/>` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      <xsl:apply-templates select="col[not(@many-to-many)]"/>
+      <xsl:apply-templates select="col"/>
+      <xsl:apply-templates select="many-to-one"/>
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   </xsl:template>
@@ -58,7 +60,7 @@
     CREATE DATABASE `<xsl:value-of select="@name"/>`;
     USE `<xsl:value-of select="@name"/>`;
     <xsl:apply-templates select="table"/>
-    <xsl:apply-templates select="table/col[@many-to-many]"/>
+    <xsl:apply-templates select="table/many-to-many"/>
   </xsl:template>
 
   <xsl:template match="/">

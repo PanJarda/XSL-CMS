@@ -1,5 +1,5 @@
 <!-- input
-<params>
+<validate-request | store-data | render-output>
   <get name="lang">cs</get>
   <cookie>fdsfafs</cookie>
 </params>
