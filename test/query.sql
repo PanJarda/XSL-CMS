@@ -1,304 +1,128 @@
 
-      DROP DATABASE IF EXISTS `jennifer_doe`;
-    
-    CREATE DATABASE `jennifer_doe`;
-    USE `jennifer_doe`;
-    
-      DROP TABLE IF EXISTS `lang`;
+    CREATE DATABASE `eshop`;
+    USE `eshop`;
     
     CREATE TABLE `lang` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
+      `name` VARCHAR(255)  NOT NULL ,
     
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `permission`;
-    
     CREATE TABLE `permission` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `description`
-    text
-      NOT NULL
-    
-    ,
+      `name` VARCHAR(255)  NOT NULL ,
+    `description`text NOT NULL ,
     
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `role`;
-    
     CREATE TABLE `role` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
+      `name` VARCHAR(255)  NOT NULL ,
     
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `group`;
-    
     CREATE TABLE `group` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
+      `name` VARCHAR(255)  NOT NULL ,
     
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `user`;
-    
     CREATE TABLE `user` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `first_name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `last_name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `nick`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `email`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `password`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
+      `first_name` VARCHAR(255)  NOT NULL ,
+    `last_name` VARCHAR(255)  NOT NULL ,
+    `nick` VARCHAR(255)  NOT NULL ,
+    `email` VARCHAR(255)  NOT NULL ,
+    `password` VARCHAR(255)  NOT NULL ,
     
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `product_category`;
-    
     CREATE TABLE `product_category` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
+      `name` VARCHAR(255)  NOT NULL ,
     `lang_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`lang_id`)
-    REFERENCES `lang`(`id`)
-    
-    ,
-  
+      FOREIGN KEY (`lang_id`)
+      REFERENCES `lang`(`id`),
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `product_attribute_value`;
-    
     CREATE TABLE `product_attribute_value` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
+      `name` VARCHAR(255)  NOT NULL ,
     
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `product_attribute_type`;
-    
     CREATE TABLE `product_attribute_type` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
+      `name` VARCHAR(255)  NOT NULL ,
     `lang_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`lang_id`)
-    REFERENCES `lang`(`id`)
-    
-    ,
-  
+      FOREIGN KEY (`lang_id`)
+      REFERENCES `lang`(`id`),
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `product_attribute`;
-    
     CREATE TABLE `product_attribute` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
+      `name` VARCHAR(255)  NOT NULL ,
     `product_attribute_type_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`product_attribute_type_id`)
-    REFERENCES `product_attribute_type`(`id`)
-    
-    ,
-  
-    `lang_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`lang_id`)
-    REFERENCES `lang`(`id`)
-    
-    ,
-  
+      FOREIGN KEY (`product_attribute_type_id`)
+      REFERENCES `product_attribute_type`(`id`),`lang_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`lang_id`)
+      REFERENCES `lang`(`id`),
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `product`;
-    
     CREATE TABLE `product` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `chart`;
-    
-    CREATE TABLE `chart` (
+    CREATE TABLE `cart` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `product_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`product_id`)
-    REFERENCES `product`(`id`)
-    
-    ,
-  
-    `product_attribute_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`product_attribute_id`)
-    REFERENCES `product_attribute`(`id`)
-    
-    ,
-  
-    `product_attribute_value_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`product_attribute_value_id`)
-    REFERENCES `product_attribute_value`(`id`)
-    
-    ,
-  
+      `product_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`product_id`)
+      REFERENCES `product`(`id`),`product_attribute_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`product_attribute_id`)
+      REFERENCES `product_attribute`(`id`),`product_attribute_value_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`product_attribute_value_id`)
+      REFERENCES `product_attribute_value`(`id`),
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `invoice`;
+    CREATE TABLE `shipping_option` (
+      `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      `name` VARCHAR(255)  NOT NULL ,
     
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  
     CREATE TABLE `invoice` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `shipping_details`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `chart_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`chart_id`)
-    REFERENCES `chart`(`id`)
-    
-    ,
-  
+      `shipping_details` VARCHAR(255)  NOT NULL ,
+    `shipping_option_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`shipping_option_id`)
+      REFERENCES `shipping_option`(`id`),`cart_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`cart_id`)
+      REFERENCES `cart`(`id`),
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
-      DROP TABLE IF EXISTS `customer`;
-    
     CREATE TABLE `customer` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-      
-    `name`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
-    `address`
-    
-      VARCHAR(255)
-    
-      NOT NULL
-    
-    ,
-    
+      `name` VARCHAR(255)  NOT NULL ,
+    `address` VARCHAR(255)  NOT NULL ,
     `user_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`user_id`)
-    REFERENCES `user`(`id`)
-    
-    ,
-  
-    `chart_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`chart_id`)
-    REFERENCES `chart`(`id`)
-    
-    ,
-  
+      FOREIGN KEY (`user_id`)
+      REFERENCES `user`(`id`),`cart_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`cart_id`)
+      REFERENCES `cart`(`id`),
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   

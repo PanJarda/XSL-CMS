@@ -1,21 +1,14 @@
 <?php
-$name = 'education';
-$limit = 10;
-$where = 'langId';
-$equals = 1;
-
-function xmlEntity2sql($name, $limit, $where, $equals) {
-  $xsl = simplexml_load_file("../lib/select-entity.xsl");
-
-  $config = simplexml_load_file('../config.xml');
-  
-  $proc = new XSLTProcessor();
-  $proc->setParameter('', 'name', $name);
-  $proc->setParameter('', 'limit', $limit);
-  $proc->setParameter('', 'where', $where);
-  $proc->setParameter('', 'equals', $equals);
-  $proc->importStylesheet($xsl);
-  return $proc->transformToXML($config);
+function fluent($obj, $methods) {
+  $res;
+  array_walk($methods, function($param, $method) use (&$obj, &$res) {
+    $res = $obj->{$method}($param);
+  });
+  return $res;
 }
 
-echo xmlEntity2sql($name, $limit, $where, $equals);
+echo fluent(new XSLTProcessor(), [
+  'importStylesheet' => simplexml_load_file("../data/index.xsl"),
+  'transformToXML' => simplexml_load_file('../config.xml')
+]);
+

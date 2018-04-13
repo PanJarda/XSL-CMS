@@ -15,30 +15,26 @@
   </xsl:template>
 
   <xsl:template match="many-to-one">
-    `<xsl:value-of select="@table"/>_id` int(10) unsigned NOT NULL,
-    FOREIGN KEY (`<xsl:value-of select="@table"/>_id`)
-    REFERENCES `<xsl:value-of select="@table"/>`(`id`)
+      <xsl:text>`</xsl:text><xsl:value-of select="@table"/>_id` int(10) unsigned NOT NULL,
+      FOREIGN KEY (`<xsl:value-of select="@table"/>_id`)
+      REFERENCES `<xsl:value-of select="@table"/><xsl:text>`(`id`)</xsl:text>
     <xsl:if test="key('name', .)/@on-delete">
       ON DELETE <xsl:value-of select="key('name', .)/@on-delete"/>
     </xsl:if>
-    ,
+    <xsl:text>,</xsl:text>
   </xsl:template>
 
   <xsl:template match="col">
-    `<xsl:value-of select="."/>`
+    <xsl:text>`</xsl:text><xsl:value-of select="."/><xsl:text>`</xsl:text>
     <xsl:value-of select="@type"/>
-    <xsl:if test="not(@type) and not(@many-to-one)">
-      VARCHAR(255)
-    </xsl:if>
-    <xsl:if test="@many-to-one">
-      int(10) unsigned
+    <xsl:if test="not(@type)">
+     <xsl:text> VARCHAR(255) </xsl:text>
     </xsl:if>
     <xsl:if test="not(@nullable)">
-      NOT NULL
+      <xsl:text> NOT NULL </xsl:text>
     </xsl:if>
-    ,
-    <xsl:apply-templates select="@many-to-one"/>
-
+    <xsl:text>,
+    </xsl:text>
   </xsl:template>
 
   <xsl:template match="table">

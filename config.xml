@@ -77,14 +77,9 @@
     </table>
   </db>
 
-  <data-flow-hook>
-    <hook>validate_request</hook>
-    <hook>store_data</hook>
-    <hook>render_output</hook>
-  </data-flow>
-
   <!-- tato data se daji prepsat v <data> pro danou podstranku -->
   <data>
     <brand>Jennifer Doe</brand>
   </data>
+  <get name="product_id">ahoj</get>
 </config>
