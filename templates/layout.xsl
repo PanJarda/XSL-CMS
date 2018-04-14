@@ -2,11 +2,11 @@
   <xsl:output method="html" encoding="utf-8" indent="yes" />
   <xsl:include href="partials/routes.xsl"/>
 
-  <xsl:template match="/config">
+  <xsl:template match="/">
     <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html&gt;</xsl:text>
     <html>
       <head>
-        <title><xsl:value-of select="routeName"/> - <xsl:value-of select="(data/brand)[last()]"/></title>
+        <title><xsl:value-of select="config/routeName"/> - <xsl:value-of select="(config/data/brand)[last()]"/></title>
         <style>
           .active {
             color: green;
@@ -14,22 +14,22 @@
         </style>
       </head>
       <body>
-        <xsl:if test="debug">
+        <xsl:if test="config/debug">
           <pre>
-            <xsl:value-of select="debug"/>
+            <xsl:value-of select="config/debug"/>
           </pre>
         </xsl:if>
         <h1>
          <xsl:choose>
-            <xsl:when test="data/title">
-              <xsl:value-of select="(data/title)[last()]"/>
+            <xsl:when test="title">
+              <xsl:value-of select="(title)[last()]"/>
             </xsl:when>
             <xsl:otherwise>
-              <xsl:value-of select="routeName"/>
+              <xsl:value-of select="config/routeName"/>
             </xsl:otherwise>
           </xsl:choose>
         </h1>
-        <xsl:apply-templates select="routes"/>
+        <xsl:apply-templates select="config/routes"/>
         <xsl:call-template name="main"/>
       </body>
     </html>

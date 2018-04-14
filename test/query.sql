@@ -1,6 +1,10 @@
 
-    CREATE DATABASE `eshop`;
-    USE `eshop`;
+      DROP DATABASE IF EXISTS `jennifer_doe`;
+    
+    CREATE DATABASE `jennifer_doe`;
+    USE `jennifer_doe`;
+    
+      DROP TABLE IF EXISTS `lang`;
     
     CREATE TABLE `lang` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -9,6 +13,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `permission`;
+    
     CREATE TABLE `permission` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -17,6 +23,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `role`;
+    
     CREATE TABLE `role` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -24,6 +32,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `group`;
+    
     CREATE TABLE `group` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -31,6 +41,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `user`;
+    
     CREATE TABLE `user` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `first_name` VARCHAR(255)  NOT NULL ,
@@ -42,6 +54,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `product_category`;
+    
     CREATE TABLE `product_category` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -51,6 +65,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `product_attribute_value`;
+    
     CREATE TABLE `product_attribute_value` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -58,6 +74,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `product_attribute_type`;
+    
     CREATE TABLE `product_attribute_type` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -67,6 +85,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `product_attribute`;
+    
     CREATE TABLE `product_attribute` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -78,12 +98,16 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `product`;
+    
     CREATE TABLE `product` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `cart`;
+    
     CREATE TABLE `cart` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `product_id` int(10) unsigned NOT NULL,
@@ -96,6 +120,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `shipping_option`;
+    
     CREATE TABLE `shipping_option` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,
@@ -103,6 +129,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `invoice`;
+    
     CREATE TABLE `invoice` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `shipping_details` VARCHAR(255)  NOT NULL ,
@@ -114,6 +142,8 @@
       PRIMARY KEY (`id`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
+      DROP TABLE IF EXISTS `customer`;
+    
     CREATE TABLE `customer` (
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
       `name` VARCHAR(255)  NOT NULL ,

@@ -1,5 +1,17 @@
 <?php
-function assoc2XML($result_assoc, $tableName, $rowName = 'item') {
+
+function flow(&$obj, $methods) {
+  $res;
+  array_walk(
+    $methods,
+    function($params, $method) use (&$obj, &$res) {
+      call_user_func_array(
+        [$obj, $method],
+        $params);});
+  return $obj;
+}
+
+function assoc2XML($result_assoc, $tableName = 'table', $rowName = 'item') {
   $xml = new SimpleXMLElement('<' . $tableName . '/>');
   foreach ($result_assoc as $row) {
     $item = $xml->addChild($rowName);
@@ -85,7 +97,21 @@ function run($config, $templatePath, $pathToData = NULL) {
   }
 }
 
-ob_start();
+function replaceSQLswithResults($queries, &$doc) {
+  foreach ($queries as $q) {
+    $result = assoc2XML(
+                sqlQuery($q->nodeValue),
+                'table',
+                $q->firstChild->attributes['name']->value);
+    $ch = dom_import_simplexml($result)->childNodes;
+    for ($j = 0; $j < $ch->length; $j++) {
+      $q->parentNode->appendChild($doc->importNode($ch->item($j), true));
+    }
+    $q->parentNode->removeChild($q);
+  }
+  return $doc;
+}
+
 $config = simplexml_load_file("config.xml");
 $servername = $config->db['server'];
 $username = $config->db['username'];
@@ -98,17 +124,30 @@ $GLOBALS['connection']->select_db($db);
 if ($GLOBALS['connection']->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-
+// routing
 $route = $config->xpath("/config/routes/route[@path='". $_SERVER['REQUEST_URI'] . "']")[0];
 if (!$route) {
   $route = $config->xpath("/config/routes/route[@path='*']")[0];
 }
+
 $templatePath = $route['template'] != NULL ? $route['template'] : $route->xpath("..")[0]['template'];
 
 $config->addChild('request_uri', $_SERVER['REQUEST_URI']);
 $config->addChild('routeName', (string) $route);
 $pathToData = $route['data'];
-$output = ob_get_clean();
-$config->addChild('debug', $output);
 
-run($config, $templatePath, $pathToData);
+$processor = flow((new XSLTProcessor()), [
+  'importStylesheet' => [simplexml_load_file($pathToData)]
+]);
+
+$data = $processor->transformToDoc($config);
+
+$queries = $data->getElementsByTagNameNS('data', 'query');
+while ($queries->length) {
+  replaceSQLswithResults($queries, $data);
+  $data = $processor->transformToDoc($data);
+  $queries = $data->getElementsByTagNameNS('data', 'query');
+}
+
+$processor->importStylesheet(simplexml_load_file((string) $templatePath));
+echo $processor->transformToXML($data);

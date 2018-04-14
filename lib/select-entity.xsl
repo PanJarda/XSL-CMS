@@ -19,6 +19,7 @@
     <xsl:param name="groupby"/>
     <xsl:param name="nojoin"/>
 
+    <row name="{$name}"/>
     <xsl:text>
 SELECT </xsl:text>
     <xsl:value-of select="$cols"/>

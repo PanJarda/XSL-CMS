@@ -1,15 +1,13 @@
 <config>
-
   <!-- sitemap -->
   <routes template="templates/pages/index.xsl">
-    <route path="/" data="data/index.xml">Home</route>
-    <route path="/:lang/about">About Me</route>
+    <route path="/" data="data/index.xsl">Home</route>
+    <route path="/lang/about" data="data/index.xsl">About Me</route>
     <route path="/admin/:tabulka" hide="true" template="templates/pages/admin.xsl">Admin</route>
     <route path="*" hide="true" data="data/404.xml">404</route>
   </routes>
-
   <!-- schema databaze -->
-  <db name="eshop" server="localhost" username="root" password="">
+  <db name="jennifer_doe" server="localhost" username="root" password="">
     <table name="lang" on-delete="cascade">
       <col>name</col>
     </table>
@@ -29,7 +27,7 @@
       <col>first_name</col>
       <col>last_name</col>
       <col>nick</col>
-      <col>email</col>
+      <col pattern="/^/">email</col>
       <col>password</col>
       <many-to-many table="group"/>
     </table>
@@ -76,10 +74,8 @@
       <many-to-many table="invoice"/>
     </table>
   </db>
-
-  <!-- tato data se daji prepsat v <data> pro danou podstranku -->
+  <!-- shared data -->
   <data>
     <brand>Jennifer Doe</brand>
   </data>
-  <get name="product_id">ahoj</get>
 </config>
