@@ -1,8 +1,0 @@
-<data xmlns:sql="sql" xmlns:data="data">
-  <description>404</description>
-  <data:entity name="article" limit="10">
-    <where ref="lang.name" test="=">
-      <data:param select="/params/@lang"/>
-    </where>
-  </data:entity>
-</data>

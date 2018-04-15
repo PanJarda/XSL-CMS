@@ -1,81 +1,23 @@
 <config>
   <!-- sitemap -->
   <routes template="templates/pages/index.xsl">
-    <route path="/" data="data/index.xsl">Home</route>
-    <route path="/lang/about" data="data/index.xsl">About Me</route>
-    <route path="/admin/:tabulka" hide="true" template="templates/pages/admin.xsl">Admin</route>
-    <route path="*" hide="true" data="data/404.xml">404</route>
+    <route path="/" hide="true" data="data/index.xsl">CryptoPortfolio</route>
+    <route path="/admin" hide="true" data="data/admin.xsl" template="templates/pages/admin.xsl">Admin</route>
+    <route path="*" data="data/404.xsl" hide="true">404</route>
   </routes>
   <!-- schema databaze -->
   <db name="jennifer_doe" server="localhost" username="root" password="">
-    <table name="lang" on-delete="cascade">
-      <col>name</col>
-    </table>
-    <table name="permission">
-      <col>name</col>
-      <col type="text">description</col>
-    </table>
-    <table name="role">
-      <col>name</col>
-      <many-to-many table="permission"/>
-    </table>
-    <table name="group">
-      <col>name</col>
-      <many-to-many table="role"/>
+    <table name="coin">
+      <col>coinId</col>
+      <col>amount</col>
     </table>
     <table name="user">
-      <col>first_name</col>
-      <col>last_name</col>
-      <col>nick</col>
-      <col pattern="/^/">email</col>
-      <col>password</col>
-      <many-to-many table="group"/>
-    </table>
-    <table name="product_category" on-delete="cascade">
-      <col>name</col>
-      <many-to-one table="lang"/>
-    </table>
-    <table name="product_attribute_value">
-      <col>name</col>
-      <many-to-many table="lang"/>
-    </table>
-    <table name="product_attribute_type">
-      <col>name</col>
-      <many-to-one table="lang"/>
-    </table>
-    <table name="product_attribute">
-      <col>name</col>
-      <many-to-one table="product_attribute_type"/>
-      <many-to-one table="lang"/>
-      <many-to-many table="product_attribute_value"/>
-    </table>
-    <table name="product">
-      <many-to-many table="product_category"/>
-      <many-to-many table="product_attribute"/>
-    </table>
-    <table name="cart">
-      <many-to-one table="product"/>
-      <many-to-one table="product_attribute"/>
-      <many-to-one table="product_attribute_value"/>
-    </table>
-    <table name="shipping_option">
-      <col>name</col>
-    </table>
-    <table name="invoice">
-      <col>shipping_details</col>
-      <many-to-one table="shipping_option"/>
-      <many-to-one table="cart"/>
-    </table>
-    <table name="customer" on-delete="cascade">
-      <col>name</col>
-      <col>address</col>
-      <many-to-one table="user"/>
-      <many-to-one table="cart"/>
-      <many-to-many table="invoice"/>
+      <col>username</col>
+      <col>pass</col>
+      <many-to-one table="coin"/>
     </table>
   </db>
-  <!-- shared data -->
   <data>
-    <brand>Jennifer Doe</brand>
+    <brand>CryptoPortfolio</brand>
   </data>
 </config>

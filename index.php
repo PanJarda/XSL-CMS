@@ -1,5 +1,4 @@
 <?php
-
 function flow(&$obj, $methods) {
   $res;
   array_walk(
@@ -22,87 +21,38 @@ function assoc2XML($result_assoc, $tableName = 'table', $rowName = 'item') {
   return $xml;
 }
 
-function mergeXML($arr, $rootName) {
-  $dom = new DOMDocument('1.0', 'utf-8');
-  $root = $dom->createElement($rootName);
-  $dom->appendChild($root);
-  foreach ($arr as $xml) {
-    $domxml = dom_import_simplexml($xml);
-    $root->appendChild($dom->importNode($domxml, true));
-  }
-  return simplexml_import_dom($root);
-}
-
 function sqlQuery($query) {
   $result = $GLOBALS['connection']->query($query);
   return $result ? $result->fetch_all(MYSQLI_ASSOC) : $GLOBALS['connection']->error;
 }
 
-function processAllQueries($xmlDoc) {
-  $x = $xmlDoc->documentElement;
-  $proc = new XSLTProcessor();
-  $proc->importStylesheet(simplexml_load_file("lib/xml2sql.xsl"));
-  $queries = $x->getElementsByTagNameNS('sql', 'query');
-  for ($i = 0; $i < $queries->length; ++$i) {
-    $query = new DOMDocument();
-    $rowName = $queries->item($i)->attributes['item']->value;
-    $query->appendChild($query->importNode($queries->item($i), true));
-    $result = assoc2XML(sqlQuery($proc->transformToXML($query)), $queries->item($i)->parentNode->tagName, $rowName ? $rowName : 'item');
-    $ch = dom_import_simplexml($result)->childNodes;
-    for ($j = 0; $j < $ch->length; $j++) {
-      $queries->item($i)->parentNode->appendChild($xmlDoc->importNode($ch->item($j), true));
-    }
-    $queries->item($i)->parentNode->removeChild($queries->item($i));
-  }
-
-  $queries = $x->getElementsByTagNameNS('sql', 'import');
-  for ($i = 0; $i < $queries->length; ++$i) {
-    $query = new DOMDocument();
-    $query->load($queries->item($i)->attributes['href']->value);
-    $rowName = $query->documentElement->attributes['item']->value;
-    $result = assoc2XML(sqlQuery($proc->transformToXML($query)), 'tmp', $rowName ? $rowName : 'item');
-    $x->replaceChild($xmlDoc->importNode(dom_import_simplexml($result), true), $queries->item($i)->parentNode);
-  }
-
-  $queries = $x->getElementsByTagNameNS('data', 'import');
-  for ($i = 0; $i < $queries->length; ++$i) {
-    $query = new DOMDocument();
-    $query->load($queries->item($i)->attributes['href']->value);
-    $x->replaceChild($xmlDoc->importNode($query->documentElement, true), $queries->item($i));
-  }
-
-  return $xmlDoc;
-}
-
-function applyTemplate($config, $templatePath, $xmlDoc = NULL) {
-  $data = new DOMDocument();
-  $data->appendChild($data->importNode(dom_import_simplexml($config), true));
-  if ($xmlDoc) {
-    $data->documentElement->appendChild($data->importNode($xmlDoc->documentElement, true));
-  }
-  //print_r($data->saveXML());
-  $xsl = simplexml_load_file($templatePath);
-  $proc = new XSLTProcessor();
-  $proc->importStylesheet($xsl);
-  return $proc->transformToXML($data);
-}
-
-function run($config, $templatePath, $pathToData = NULL) {
-  if ($pathToData) {
-    $xmlDoc = new DOMDocument();
-    $xmlDoc->load($pathToData);
-    echo applyTemplate($config, $templatePath, processAllQueries($xmlDoc));
-  } else {
-     echo applyTemplate($config, $templatePath);
-  }
-}
-
-function replaceSQLswithResults($queries, &$doc) {
+function processSelects($queries, &$doc) {
   foreach ($queries as $q) {
     $result = assoc2XML(
                 sqlQuery($q->nodeValue),
                 'table',
                 $q->firstChild->attributes['name']->value);
+    $ch = dom_import_simplexml($result)->childNodes;
+    for ($j = 0; $j < $ch->length; $j++) {
+      $q->parentNode->appendChild($doc->importNode($ch->item($j), true));
+    }
+    $q->parentNode->removeChild($q);
+  }
+  return $doc;
+}
+
+function processInserts($queries, &$doc) {
+  foreach ($queries as $q) {
+    $result = $GLOBALS['connection']->query($q->nodeValue);
+    $q->parentNode->removeChild($q);
+  }
+  return $doc;
+}
+
+function processJSONs($queries, &$doc) {
+  foreach ($queries as $q) {
+    $json = file_get_contents($q->attributes['href']->nodeValue);
+    $result = assoc2xml(json_decode($json), 'table', 'coin');
     $ch = dom_import_simplexml($result)->childNodes;
     for ($j = 0; $j < $ch->length; $j++) {
       $q->parentNode->appendChild($doc->importNode($ch->item($j), true));
@@ -119,21 +69,48 @@ $password = $config->db['password'];
 $db=  $config->db['name'];
 $conn = new mysqli($servername, $username, $password);
 $GLOBALS['connection'] = $conn;
+$GLOBALS['connection']->set_charset('utf8');
 $GLOBALS['connection']->select_db($db);
 
 if ($GLOBALS['connection']->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 // routing
-$route = $config->xpath("/config/routes/route[@path='". $_SERVER['REQUEST_URI'] . "']")[0];
+$route = $config->xpath("/config/routes/route[@path='". parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) . "']")[0];
 if (!$route) {
   $route = $config->xpath("/config/routes/route[@path='*']")[0];
 }
 
 $templatePath = $route['template'] != NULL ? $route['template'] : $route->xpath("..")[0]['template'];
 
-$config->addChild('request_uri', $_SERVER['REQUEST_URI']);
+$config->addChild('request_uri', parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+
 $config->addChild('routeName', (string) $route);
+
+foreach($_POST as $key => $val) {
+  if (is_array($val)) {
+    foreach($val as $v) {
+      $tmp = $config->addChild('post', (string) $v);
+      $tmp->addAttribute('name', (string) $key);
+    }
+  } else {
+    $tmp = $config->addChild('post', (string) $val);
+    $tmp->addAttribute('name', (string) $key);
+  }
+}
+
+foreach($_GET as $key => $val) {
+  if (is_array($val)) {
+    foreach($val as $v) {
+      $tmp = $config->addChild('get', $GLOBALS['connection']->real_escape_string(htmlspecialchars((string) $v)));
+      $tmp->addAttribute('name', $GLOBALS['connection']->real_escape_string(htmlspecialchars((string) $key)));
+    }
+  } else {
+    $tmp = $config->addChild('get', $GLOBALS['connection']->real_escape_string(htmlspecialchars((string) $val)));
+    $tmp->addAttribute('name', $GLOBALS['connection']->real_escape_string(htmlspecialchars((string) $key)));
+  }
+}
+
 $pathToData = $route['data'];
 
 $processor = flow((new XSLTProcessor()), [
@@ -142,12 +119,19 @@ $processor = flow((new XSLTProcessor()), [
 
 $data = $processor->transformToDoc($config);
 
-$queries = $data->getElementsByTagNameNS('data', 'query');
-while ($queries->length) {
-  replaceSQLswithResults($queries, $data);
+$selects = $data->getElementsByTagNameNS('data', 'select');
+$inserts = $data->getElementsByTagNameNS('data', 'insert');
+$jsons = $data->getElementsByTagNameNS('data', 'json');
+while ($selects->length || $inserts->length || $jsons->length) {
+  processSelects($selects, $data);
+  processInserts($inserts, $data);
+  processJSONs($jsons, $data);
   $data = $processor->transformToDoc($data);
-  $queries = $data->getElementsByTagNameNS('data', 'query');
+  $selects = $data->getElementsByTagNameNS('data', 'select');
+  $inserts = $data->getElementsByTagNameNS('data', 'insert');
+  $jsons = $data->getElementsByTagNameNS('data', 'json');
 }
 
+//print_r($data->saveXML());
 $processor->importStylesheet(simplexml_load_file((string) $templatePath));
 echo $processor->transformToXML($data);

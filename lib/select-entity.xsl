@@ -1,4 +1,4 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:data="data" version="1.0">
 
   <xsl:template match="many-to-many">
     LEFT JOIN `<xsl:value-of select="../@name"/>_x_<xsl:value-of select="@table"/>`
@@ -10,7 +10,7 @@
     ON <xsl:value-of select="@table"/>_id = <xsl:value-of select="@table"/>.id
   </xsl:template>
 
-  <xsl:template match="table">
+  <xsl:template match="table" mode="select">
     <xsl:param name="name"/>
     <xsl:param name="cols"/>
     <xsl:param name="limit"/>
@@ -19,6 +19,7 @@
     <xsl:param name="groupby"/>
     <xsl:param name="nojoin"/>
 
+    <data:select>
     <row name="{$name}"/>
     <xsl:text>
 SELECT </xsl:text>
@@ -36,6 +37,7 @@ SELECT </xsl:text>
       <xsl:text> LIMIT </xsl:text><xsl:value-of select="$limit"/>
     </xsl:if>
     <xsl:text>;</xsl:text>
+    </data:select>
   </xsl:template>
 
   <xsl:template name="select-entity">
@@ -46,7 +48,7 @@ SELECT </xsl:text>
     <xsl:param name="orderby"/>
     <xsl:param name="groupby"/>
     <xsl:param name="nojoin"/>
-    <xsl:apply-templates select="/config/db/table[@name=$name]">
+    <xsl:apply-templates select="/config/db/table[@name=$name]" mode="select">
       <xsl:with-param name="name" select="$name"/>
       <xsl:with-param name="cols" select="$cols"/>
       <xsl:with-param name="limit" select="$limit"/>

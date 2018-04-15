@@ -42,10 +42,13 @@
       DROP TABLE IF EXISTS `<xsl:value-of select="@name"/>`;
     </xsl:if>
     CREATE TABLE `<xsl:value-of select="@name"/>` (
+      <xsl:if test="not(primary_key)">
       `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      </xsl:if>
+      <xsl:value-of select="primary_key"/>
       <xsl:apply-templates select="col"/>
       <xsl:apply-templates select="many-to-one"/>
-      PRIMARY KEY (`id`)
+      PRIMARY KEY (`<xsl:if test="not(primary_key)">id</xsl:if><xsl:value-of select="primary_key"/>`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   </xsl:template>
 
